@@ -170,3 +170,9 @@ def bubble_sort(data):
             if a[i] < a[i-1]:
                 a[i], a[i-1] = a[i-1], a[i] #unpacking
 ```
+we can use _unpacking_ for iterate more readable
+```python
+items = [("Snacks", 100), ("Cola", 120)]
+for index, (name, price) in enumerate(items): #easier than normal loop
+    print(f"The price of {name} is {price}")
+```
