@@ -45,3 +45,41 @@ print(sys.version)
     - Standard library modules (``sys``, ``os``, ...)
     - Third-party modules (``pandas``, ``numpy``, ...)
     - Your own modules
+
+## Item 3: Know the Differences Between bytes and str
+Distinguish between ``str`` and ``bytes`` in Python
+* ``str``: contain Unicode code points that represent textual characters from human languages
+* ``bytes``: raw, unsigend 8-bit value (often displayed in ACSII), use for computer and system
+
+You can't operate between ``str`` and ``bytes``, these operation must be convert formerly (operators like ``>``, ``==``, ``+`` and ``%``)
+```bash
+>>> b'hello' + 'world'
+TypeError: can't concat bytes to str
+```
+Convert first using encode() (for ``str`` to bytes) and decode() (reverse)
+```bash
+>>> b'hello' + 'world'.encode()
+b'helloworld'
+```
+```bash
+>>> b'hello'.decode() + 'world'
+'helloworld'
+```
+
+When working with file, declare explitcily read/write text mode or read/write bianry mode to make sure there is no failure
+* Reading text file
+```python
+with open('data.txt','r', encoding='utf-8') as f:
+    content = f.read()
+```
+* Reading binary file
+```python
+with open('data.bin','rb') as f:
+    content = f.read()
+```
+
+When encoding, make sure using the right UnicodeEncoder
+```bash
+>>> 'ñòóôõ'.encode('acsii')
+
+```
