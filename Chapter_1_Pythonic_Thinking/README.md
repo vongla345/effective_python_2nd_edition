@@ -6,7 +6,7 @@ Use Python 3
 ```bash
 python --version
 ```
-```bash
+```python
 import sys
 print(sys.version_info)
 print(sys.version)
@@ -81,5 +81,92 @@ with open('data.bin','rb') as f:
 When encoding, make sure using the right UnicodeEncoder
 ```bash
 >>> 'ñòóôõ'.encode('acsii')
+UnicodeEncodeError: 'ascii' codec can't encode characters
+```
 
+## Item 4: Prefer Interpolated F-Strings Over C-style Format and ``str.format()``
+
+Prefer using F-string than C-style and str.format() for:
+* Readable
+* Shorter
+* More efficient
+
+C-style
+```python
+name = "Nhan"
+age = 22
+print("My name is %s and I'm %d years old." % (name, age))
+```
+-> Oudated, many type which is not supported (``list``, ``tuple``, object, ...)
+
+``str.format()``
+```python
+print("My name is {} and I'm {} years old.".format(name, age))
+```
+-> Easily getting confuse if there are many variables, hard to debug
+
+F-string
+```python
+print(f"My name is {name} and I'm {age} years old.")
+```
+
+##  Item 5 – Write Helper Functions Instead of Complex Expressions
+Instead of put all logic in 1 line, seperate it into specific functiono to:
+* Readable
+* Reuse
+* Easily testing
+
+Although Python's syntax can help us easily write single-line expresson, it can be overly complicated and difficult to read.
+```python
+value = int(user_input.strip().split(',')[1]) if ',' in user_input else 0
+```
+-> short, but hard to understand
+-> user helper functions
+```python
+def parse_second_field(user_input: str) -> int:
+    if ',' not in user_input:
+        return 0
+    parts = user_input.strip().split(',')
+    return int(parts[1])
+
+value = parse_second_field(user_input)
+```
+-> more readable
+
+when coding, it is important to implement helper functions with:
+* explicit name
+* write more lines of code if it's needed to be more easily understand
+* you can split into smaller funtions if it repeat the code in helper functions
+
+## Item 6: Prefer Multiple Assignment Unpacking Over Indexing
+
+When using tuple, it's easier to _unpacking_ value in it by using Python's syntax rather than traditional way
+* Normal way 
+```python
+user = ("Nhan", 22)
+name = user[0]
+age = user[1]
+```
+* Use unpacking in tuple
+```python
+user = ("Nhan", 22)
+name, age = user
+```
+We can use _unpacking_ for swap values
+```python
+#normal way
+def bubble_sort(data):
+    for _ in range(len(data)):
+        for i in range(len(data)):
+            if a[i] < a[i-1]:
+                temp = a[i]
+                a[i] = a[i-1]
+                a[i-1] = temp
+```
+```python
+def bubble_sort(data):
+    for _ in range(len(data)):
+        for i in range(len(data)):
+            if a[i] < a[i-1]:
+                a[i], a[i-1] = a[i-1], a[i] #unpacking
 ```
