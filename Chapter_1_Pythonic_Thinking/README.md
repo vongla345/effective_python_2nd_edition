@@ -140,39 +140,143 @@ when coding, it is important to implement helper functions with:
 
 ## Item 6: Prefer Multiple Assignment Unpacking Over Indexing
 
-When using tuple, it's easier to _unpacking_ value in it by using Python's syntax rather than traditional way
+When using tuple, it's easier to ``unpacking`` value in it by using Python's syntax rather than traditional way
 * Normal way 
 ```python
 user = ("Nhan", 22)
 name = user[0]
 age = user[1]
 ```
-* Use unpacking in tuple
+* Use ``unpacking`` in tuple
 ```python
 user = ("Nhan", 22)
 name, age = user
 ```
-We can use _unpacking_ for swap values
+We can use ``unpacking`` for swap values
 ```python
 #normal way
 def bubble_sort(data):
     for _ in range(len(data)):
         for i in range(len(data)):
-            if a[i] < a[i-1]:
-                temp = a[i]
-                a[i] = a[i-1]
-                a[i-1] = temp
+            if data[i] < data[i-1]:
+                temp = data[i]
+                data[i] = data[i-1]
+                data[i-1] = temp
 ```
 ```python
 def bubble_sort(data):
     for _ in range(len(data)):
         for i in range(len(data)):
-            if a[i] < a[i-1]:
-                a[i], a[i-1] = a[i-1], a[i] #unpacking
+            if data[i] < data[i-1]:
+                data[i], data[i-1] = data[i-1], data[i] #unpacking
 ```
 we can use _unpacking_ for iterate more readable
 ```python
 items = [("Snacks", 100), ("Cola", 120)]
-for index, (name, price) in enumerate(items): #easier than normal loop
+for index, (name, price) in enumerate(items): #easier to read than index-based loop
     print(f"The price of {name} is {price}")
+```
+
+## Item 7: Prefer enumerate Over range
+Prefer using ``enemerate()`` when looping to get both index and item of given data (``list``, ``array``, ...)
+``enumerate()`` will return a tuple containing both index and item, then using _unpacking_ to get these variables
+
+```python
+flavor_list = ['vanilla', 'chocolate', 'pecan', 'strawberry']
+
+for index, flavor in enumerate(flavor_list):
+    print(f'{i + 1}: {flavor}')
+```
+
+## Item 8: Use zip to Process Iterators in Parallel
+Use ``zip`` when looping 2 list with they are related
+```python
+names = ['Nhan', 'Huy']
+ages = [20, 22]
+
+for name, age in zip(names, ages):
+    print(f"Age of {name} is {age}")
+```
+``zip`` default will loop with the shortest length from 2 list, if you want longest length, use ``zip_longest`` from ``itertools`` built-in module.
+```python
+from itertools import zip_longest
+
+names = ['Nhan', 'Huy', 'Anh']
+ages = [22, 20]
+
+for name, age in zip_longest(names, ages):
+    print(name, age)
+
+# Output: 
+# Nhan 22
+# Huy 20
+# Anh None
+```
+
+## Item 9: Avoid else Blocks After for and while Loops
+
+In Python, an ``else`` block after a ``for`` or ``while`` loop means that if the loop was completed, then execute the ``else`` block.
+```python
+lst = [1, 2, 3, 4, 5]
+
+for i in lst:
+    print(i)
+else:
+    print("Finish")
+
+# Output
+# 1
+# 2
+# 3
+# 4
+# 5
+# Finish
+```
+
+if the loop isn't completed, then the ``else`` block won't execute
+```python
+num = 2
+lst = [1, 2, 3, 4, 5]
+
+for i in lst:
+    if num == i:
+        print("Found")
+        break
+    print(i)
+else:
+    print("Finish")
+
+# Output
+# 1
+# Found
+```
+
+Avoid using an ``else`` block after a loop because it can be very confusing.
+
+One use case is searching an object in data list, if the object exsits in data list, then the ``else`` block execute. 
+
+## Item 10: Prevent Repetition with Assignment Expressions
+In usual way, we have to assign variable and then check it with logic:
+```python
+value = get_data()
+
+if value:
+    print(value)
+```
+
+we can make it shorter by using walrus operator (``:=``)
+```python
+if (value := get_data()):
+    print(value)
+```
+
+we can use walrus operator in loop
+```python
+while (line := file.readline()):
+    print(line)
+```
+
+Avoid using walrus too much as it can make your code harder to read
+```python
+if (n := len(data)) > 10 and (a := avg(data)) < 5:
 ```
