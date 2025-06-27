@@ -31,3 +31,5 @@ build/
 *.db
 
 *.ipynb
+
+item_2/
